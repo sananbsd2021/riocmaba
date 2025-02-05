@@ -13,8 +13,24 @@ const BookBidpropsPage = () => {
   const [date, setDate] = useState("");
   const [topic, setTopic] = useState("");
   const [note, setNote] = useState("");
+  const [year, setYear] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [userId, setUserId] = useState<string | null>(null); // State to hold the current user's ID
+
+  // Fetch the authenticated user's ID
+  const fetchUser = async () => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    if (error) {
+      console.error("Error fetching user:", error.message);
+      setErrorMessage("Failed to fetch user information.");
+    } else if (user) {
+      setUserId(user.id);
+    }
+  };
 
   // Fetch the latest numbid from the database
   const fetchLatestNumbid = async () => {
@@ -47,13 +63,20 @@ const BookBidpropsPage = () => {
   };
 
   useEffect(() => {
-    fetchLatestNumbid(); // Fetch on component load
+    fetchUser(); // Fetch user information on component load
+    fetchLatestNumbid(); // Fetch numbid on component load
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage(""); // Reset error message
+
+    if (!userId) {
+      setErrorMessage("User is not authenticated.");
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const { error } = await supabase.from("bookbidding").insert([
@@ -62,6 +85,8 @@ const BookBidpropsPage = () => {
           date,
           topic,
           note,
+          year,
+          users_id: userId, // Include the current user's ID
         },
       ]);
 
@@ -77,6 +102,7 @@ const BookBidpropsPage = () => {
       setDate("");
       setTopic("");
       setNote("");
+      setYear("");
       fetchLatestNumbid(); // Refresh numbid for next entry
     } catch (err) {
       console.error("Unexpected error submitting form:", err);
@@ -141,6 +167,17 @@ const BookBidpropsPage = () => {
               type="text"
               value={note}
               onChange={(e) => setNote(e.target.value)}
+              className="mt-1 p-2 border rounded w-full"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium">ปี</label>
+            <input
+              type="text"
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
               className="mt-1 p-2 border rounded w-full"
               required
             />

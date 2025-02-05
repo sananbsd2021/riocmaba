@@ -18,6 +18,22 @@ const BookRepropsPage = () => {
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // Fetch the authenticated user's ID
+  const fetchUser = async () => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+
+    if (error) {
+      console.error("Error fetching user:", error.message);
+      setErrorMessage("Failed to fetch user information.");
+    } else if (user) {
+      setUserId(user.id);
+    }
+  };
 
   // Fetch the latest numreceive from the database
   const fetchLatestNumreceive = async () => {
@@ -50,13 +66,20 @@ const BookRepropsPage = () => {
   };
 
   useEffect(() => {
-    fetchLatestNumreceive(); // Fetch on component load
+    fetchUser(); // Fetch user ID on component load
+    fetchLatestNumreceive(); // Fetch numreceive on component load
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage(""); // Reset error message
+
+    if (!userId) {
+      alert("User not authenticated. Please log in.");
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const { error } = await supabase.from("bookreceive").insert([
@@ -68,6 +91,7 @@ const BookRepropsPage = () => {
           topic,
           plan,
           note,
+          users_id: userId, // Include authenticated user ID
         },
       ]);
 
@@ -113,7 +137,6 @@ const BookRepropsPage = () => {
         <form onSubmit={handleSubmit}>
           <div className="mb-4 flex gap-4">
             <div className="mb-4">
-              {/* <label className="block text-sm font-medium">ที่หนังสือรับ</label> */}
               <input
                 type="text"
                 value={numreceive}
@@ -123,7 +146,6 @@ const BookRepropsPage = () => {
             </div>
 
             <div className="mb-4">
-              {/* <label className="block text-sm font-medium">วันที่</label> */}
               <input
                 type="date"
                 value={date}
@@ -135,7 +157,6 @@ const BookRepropsPage = () => {
           </div>
           <div className="mb-4 flex gap-4">
             <div className="mb-4">
-              {/* <label className="block text-sm font-medium">จาก</label> */}
               <input
                 type="text"
                 value={fromreceive}
@@ -147,7 +168,6 @@ const BookRepropsPage = () => {
             </div>
 
             <div className="mb-4">
-              {/* <label className="block text-sm font-medium">ถึง</label> */}
               <input
                 type="text"
                 value={toreceive}
@@ -159,7 +179,6 @@ const BookRepropsPage = () => {
             </div>
           </div>
           <div className="mb-4">
-            {/* <label className="block text-sm font-medium">เรื่อง</label> */}
             <textarea
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
@@ -170,7 +189,6 @@ const BookRepropsPage = () => {
           </div>
 
           <div className="mb-4">
-            {/* <label className="block text-sm font-medium">การปฎิบัติ</label> */}
             <input
               type="text"
               value={plan}
@@ -182,7 +200,6 @@ const BookRepropsPage = () => {
           </div>
 
           <div className="mb-4">
-            {/* <label className="block text-sm font-medium">หมายเหตุ</label> */}
             <input
               type="text"
               value={note}
