@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -10,7 +11,7 @@ const supabase = createClient();
 const BookBidPage = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(5);
+  const [pageSize] = useState(15);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,7 +41,7 @@ const BookBidPage = () => {
       const { data, error } = await supabase
         .from("bookbidding")
         .select("*")
-        .ilike("topic", `%${searchQuery}%`);
+        .ilike("year", `%${searchQuery}%`);
 
       if (error) {
         setError("Error fetching search results");
@@ -98,34 +99,55 @@ const BookBidPage = () => {
 
       {error && <p className="text-red-500">{error}</p>}
 
-      {/* แสดงผลลัพธ์การค้นหา */}
       {searchQuery && searchResults.length > 0 && (
         <div className="mb-4">
-       
           <h2 className="text-xl font-bold mb-2">ผลลัพธ์การค้นหา</h2>
-          <ul className="space-y-2">
-            {searchResults.map((result: any) => (
-              <li key={result.numbid} className="p-2 border rounded">
-                <p>
-                  <strong>ที่คำสั่ง:</strong> {result.numbid}
-                </p>
-                <p>
-                  <strong>เรื่อง:</strong> {result.topic}
-                </p>
-                <p>
-                  <strong>วันที่:</strong> {result.date}
-                </p>
-                <p>
-                  <Link
-                    href={`/bookbidding/${result.id}`}
-                    className="px-2 py-1 bg-blue-600 text-white rounded"
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse border border-gray-200">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-4 py-2 border border-gray-200">
+                    ที่คำสั่ง
+                  </th>
+                  <th className="px-4 py-2 border border-gray-200">เรื่อง</th>
+                  <th className="px-4 py-2 border border-gray-200">วันที่</th>
+                  <th className="px-4 py-2 border border-gray-200">ปี</th>
+                  <th className="px-4 py-2 border border-gray-200">
+                    ดูรายละเอียด
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {searchResults.map((result, index) => (
+                  <tr
+                    key={`${result.numbid}-${result.year}-${index}`}
+                    className="hover:bg-gray-50"
                   >
-                    View
-                  </Link>
-                </p>
-              </li>
-            ))}
-          </ul>
+                    <td className="px-4 py-2 border border-gray-200">
+                      {result.numbid}
+                    </td>
+                    <td className="px-4 py-2 border border-gray-200">
+                      {result.topic}
+                    </td>
+                    <td className="px-4 py-2 border border-gray-200">
+                      {result.date}
+                    </td>
+                    <td className="px-4 py-2 border border-gray-200">
+                      {result.year}
+                    </td>
+                    <td className="px-4 py-2 border border-gray-200 text-center">
+                      <Link
+                        href={`/bookbidding/${result.id}`}
+                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                      >
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
@@ -144,15 +166,17 @@ const BookBidPage = () => {
               </tr>
             </thead>
             <tbody>
-              {posts.map((post) => (
-                <tr key={post.numbid} className="hover:bg-gray-50">
+              {posts.map((post, index) => (
+                <tr
+                  key={`${post.numbid}-${post.year}-${index}`}
+                  className="hover:bg-gray-50"
+                >
                   <td className="px-4 py-2 border border-gray-200">
                     {post.numbid}
                   </td>
                   <td className="px-4 py-2 border border-gray-200">
                     {post.date}
                   </td>
-
                   <td className="px-4 py-2 border border-gray-200">
                     {truncateText(post.topic, 50)}
                   </td>
