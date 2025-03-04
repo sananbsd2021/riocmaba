@@ -5,6 +5,9 @@ import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
+import { Textarea } from "@/components/ui/textarea"
+
 import {
   Select,
   SelectContent,
@@ -179,8 +182,8 @@ const BookBidDetailsPage = () => {
 
           <div className="mb-4">
             <Label>เรื่อง</Label>
-            <Input
-              type="text"
+
+<Textarea
               name="topic"
               value={editForm.topic}
               onChange={handleFormChange}
