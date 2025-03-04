@@ -111,6 +111,7 @@ const BookBidPage = () => {
                   <th className="px-4 py-2 border border-gray-200">เรื่อง</th>
                   <th className="px-4 py-2 border border-gray-200">วันที่</th>
                   <th className="px-4 py-2 border border-gray-200">ปี</th>
+ <th className="px-4 py-2 border border-gray-200">หมายเหตุ</th>
                   <th className="px-4 py-2 border border-gray-200">
                     ดูรายละเอียด
                   </th>
@@ -134,6 +135,10 @@ const BookBidPage = () => {
                     <td className="px-4 py-2 border border-gray-200">
                       {result.year}
                     </td>
+<td className="px-4 py-2 border border-gray-200">
+                      {result.plan}
+                    </td>
+
                     <td className="px-4 py-2 border border-gray-200 text-center">
                       <Link
                         href={`/bookbidding/${result.id}`}
