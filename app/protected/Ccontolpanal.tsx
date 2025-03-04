@@ -7,7 +7,7 @@ const ControlPanelPage = () => {
     { href: "/bookbidding", title: "คำสั่ง", desc: "จัดการคำสั่ง", buttonText: "เพิ่มคำสั่ง" },
     { href: "/bookre", title: "หนังสือรับ", desc: "จัดการหนังสือรับ", buttonText: "เพิ่มหนังสือรับ" },
     { href: "/booksend", title: "หนังสือส่ง", desc: "จัดการหนังสือส่ง", buttonText: "เพิ่มหนังสือส่ง" },
-    { href: "/supplies", title: "พัสดุ", desc: "จัดการพัสดุ", buttonText: "เพิ่มทะเบียนพัสดุ" },
+    { href: "/supplies", title: "บันทึกข้อความ", desc: "จัดการบันทึกข้อความ", buttonText: "เพิ่มทะเบียนบันทึกข้อความ" },
   ];
 
   return (
