@@ -180,6 +180,37 @@ const BookBidpropsPage = () => {
             <Textarea value={topic} onChange={(e) => setTopic(e.target.value)} required />
           </div>
 
+                    <div className="mb-4">
+            <Label htmlFor="plan">หมายเหตุ</Label>
+            <Select onValueChange={(value) => setNote(value)}>
+              <SelectTrigger id="plan">
+                <SelectValue placeholder="หมายเหตุ" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                <SelectItem value="กำลังดำเนินการ">กำลังดำเนินการ</SelectItem>
+                <SelectItem value="เรียบร้อยแล้ว">เรียบร้อยแล้ว</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="mb-4">
+            <Label htmlFor="note">หน่วยงาน</Label>
+            <Select onValueChange={(value) => setNote(value)}>
+              <SelectTrigger id="note">
+                <SelectValue placeholder="เลือกสังกัด" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                <SelectItem value="สำนักปลัด">สำนักปลัด</SelectItem>
+                <SelectItem value="กองคลัง">กองคลัง</SelectItem>
+                <SelectItem value="กองการศึกษา">กองการศึกษา</SelectItem>
+                <SelectItem value="กองช่าง">กองช่าง</SelectItem>
+                <SelectItem value="กองสวัสดิการสังคม">กองสวัสดิการสังคม</SelectItem>
+                <SelectItem value="งานป้องกัน">งานป้องกัน</SelectItem>
+              </SelectContent>
+            </Select>
+            {/* <Textarea value={topic} onChange={(e) => setTopic(e.target.value)} required /> */}
+          </div>
+          
           <Button
             label={isSubmitting ? "Submitting..." : "Submit"}
             type="submit"
