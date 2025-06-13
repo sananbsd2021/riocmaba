@@ -23,7 +23,7 @@ const BookBidpropsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [numbid, setNumbid] = useState("B0001");
   const [date, setDate] = useState("");
-  const [topic, setTopic] = useState("");
+  const [topic, setTopic] = useState("-");
   const [note, setNote] = useState("");
   const [year, setYear] = useState(""); // ให้ผู้ใช้เลือก
   const [plan, setPlan] = useState("");
@@ -123,7 +123,7 @@ const BookBidpropsPage = () => {
       // alert("Form Submitted!");
       setIsModalOpen(false);
       setDate("");
-      setTopic("");
+      setTopic("-");
       setNote("");
       setYear("");
       setPlan("");
